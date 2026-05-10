@@ -1,199 +1,179 @@
-import { useState, useEffect } from "react";
+// Navbar.jsx
+
+import { useState } from "react";
 import {
   FaBars,
   FaTimes,
-  FaUserCircle,
   FaMicrophone,
   FaCommentDots,
 } from "react-icons/fa";
-import image from "../assets/images/image2.jpeg"
+
+import image from "../assets/images/image2.jpeg";
 
 const G = "#008B44";
 const B = "#2398DD";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
-  }, []);
 
   return (
     <>
-      {/* Professional Font */}
       <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet"
       />
 
       <nav
+        className="
+          w-full
+          bg-white
+          border-b
+          border-gray-200
+          sticky
+          top-0
+          z-50
+          shadow-sm
+        "
         style={{
-          background: "#fff",
-          boxShadow: "0 2px 14px rgba(0,0,0,0.06)",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
           fontFamily: "'Inter', sans-serif",
         }}
       >
         <div
-          style={{
-            maxWidth: 1350,
-            margin: "0 auto",
-            padding: "0 28px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: 74,
-          }}
+          className="
+            max-w-7xl
+            mx-auto
+
+            h-[72px]
+            md:h-[78px]
+            lg:h-[82px]
+
+            px-4
+            md:px-6
+
+            flex
+            items-center
+            justify-between
+          "
         >
-          {/* LEFT SECTION */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-            }}
-          >
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
             {/* LOGO */}
             <img
-              src={image} // Replace with your actual logo path
-              alt="Irrigo Agrotech"
-              style={{
-                height: 54,
-                width: "auto",
-                objectFit: "contain",
-              }}
+              src={image}
+              alt="IRRIGO"
+              className="
+                h-11
+                md:h-12
+                lg:h-14
+                w-auto
+                object-contain
+              "
             />
 
-            {/* BRAND NAME */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                lineHeight: 1,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 28,
-                  fontWeight: 900,
-                  color: "#111",
-                  letterSpacing: "-1px",
-                }}
+            {/* BRAND */}
+            <div className="leading-none">
+              <h1
+                className="
+                  text-[24px]
+                  md:text-[28px]
+                  font-black
+                  tracking-[-1px]
+                  text-black
+                "
               >
                 IRRIGO
-              </span>
+              </h1>
 
-              <span
+              <p
+                className="
+                  text-[10px]
+                  md:text-[12px]
+                  font-bold
+                  tracking-[3px]
+                  mt-1
+                "
                 style={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: "4px",
                   color: G,
-                  marginTop: 3,
                 }}
               >
                 AGROTECH
-              </span>
+              </p>
             </div>
           </div>
 
-          {/* RIGHT SECTION */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-            }}
-          >
-            {/* FEEDBACK BUTTON */}
+          {/* RIGHT */}
+          <div className="flex items-center gap-3">
+            {/* FEEDBACK */}
             <button
-              style={{
-                border: "1px solid #E4E4E7",
-                background: "#fff",
-                color: "#333",
-                borderRadius: 12,
-                padding: "10px 16px",
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                transition: ".2s",
-              }}
+              className="
+                hidden
+                md:flex
+
+                items-center
+                gap-2
+
+                border
+                border-gray-200
+
+                px-4
+                py-2.5
+
+                rounded-xl
+
+                text-sm
+                font-semibold
+
+                hover:bg-gray-50
+                transition-all
+              "
             >
               <FaCommentDots />
               Feedback
             </button>
 
-            {/* VOICE BUTTON */}
+            {/* MIC */}
             <button
+              className="
+                w-11
+                h-11
+
+                rounded-full
+
+                flex
+                items-center
+                justify-center
+
+                text-[16px]
+
+                transition-all
+              "
               style={{
-                width: 42,
-                height: 42,
-                borderRadius: "50%",
-                border: "none",
                 background: "#EEF7FF",
                 color: B,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 17,
               }}
             >
               <FaMicrophone />
             </button>
 
-            {/* AUTH SECTION */}
-            {!isLoggedIn ? (
-              <button
-                style={{
-                  background: `linear-gradient(135deg, ${G}, ${B})`,
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 14,
-                  padding: "11px 24px",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-                }}
-              >
-                Login
-              </button>
-            ) : (
-              <button
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#333",
-                  fontSize: 34,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <FaUserCircle />
-              </button>
-            )}
-
-            {/* MOBILE MENU BUTTON */}
+            {/* MOBILE MENU */}
             <button
               onClick={() => setOpen(!open)}
-              className="mob-burger"
-              style={{
-                display: "none",
-                background: "transparent",
-                border: "none",
-                fontSize: 24,
-                cursor: "pointer",
-                color: "#222",
-              }}
+              className="
+                md:hidden
+
+                w-11
+                h-11
+
+                rounded-full
+
+                flex
+                items-center
+                justify-center
+
+                text-[18px]
+
+                bg-gray-100
+              "
             >
               {open ? <FaTimes /> : <FaBars />}
             </button>
@@ -203,58 +183,56 @@ const Navbar = () => {
         {/* MOBILE DROPDOWN */}
         {open && (
           <div
-            style={{
-              background: "#fff",
-              borderTop: "1px solid #eee",
-              padding: "16px 24px",
-            }}
+            className="
+              md:hidden
+
+              border-t
+              border-gray-100
+
+              px-4
+              py-4
+
+              bg-white
+            "
           >
             <button
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: 10,
-                border: "1px solid #ddd",
-                background: "#fff",
-                fontWeight: 600,
-                marginBottom: 12,
-              }}
+              className="
+                w-full
+
+                h-12
+
+                rounded-xl
+
+                border
+                border-gray-200
+
+                font-semibold
+
+                mb-3
+              "
             >
               Feedback
             </button>
 
-            {!isLoggedIn && (
-              <button
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: 10,
-                  border: "none",
-                  background: `linear-gradient(135deg, ${G}, ${B})`,
-                  color: "#fff",
-                  fontWeight: 700,
-                }}
-              >
-                Login
-              </button>
-            )}
+            <button
+              className="
+                w-full
+
+                h-12
+
+                rounded-xl
+
+                text-white
+                font-bold
+              "
+              style={{
+                background: `linear-gradient(135deg, ${G}, ${B})`,
+              }}
+            >
+              Login
+            </button>
           </div>
         )}
-
-        {/* RESPONSIVE */}
-        <style>{`
-          @media(max-width: 768px){
-            .mob-burger{
-              display:flex !important;
-            }
-          }
-
-          @media(max-width: 640px){
-            nav img{
-              height:44px !important;
-            }
-          }
-        `}</style>
       </nav>
     </>
   );
