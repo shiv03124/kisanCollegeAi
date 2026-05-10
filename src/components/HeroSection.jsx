@@ -107,7 +107,7 @@ const HeroSection = () => {
     try {
       // ✅ SEND FULL CONVERSATION
       const response = await fetch(
-        "http://localhost:5000/api/chat",
+        "https://kisan-collegeai-backend.vercel.app/api/chat",
         {
           method: "POST",
 
