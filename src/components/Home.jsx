@@ -9,10 +9,10 @@ const Home = () => {
   return (
     <>
       <HeroSection />
-      <CategoryBrowse />
+      {/* <CategoryBrowse />
       <HotDeals />
       <MandiRates />
-      <FeaturesSection />
+      <FeaturesSection /> */}
     </>
   );
 };

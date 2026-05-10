@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FaCloudSun,
   FaMoneyBillWave,
   FaSeedling,
   FaBug,
-  FaChevronRight,
-  FaRobot,
-  FaArrowLeft,
   FaPaperPlane,
+  FaRobot,
 } from "react-icons/fa";
 
 const SYSTEM_PROMPT = `
@@ -21,75 +19,73 @@ Namaste 🙏 Main aapka irrigation design banane mein help karunga.
 const tabs = [
   {
     id: "weather",
-    icon: <FaCloudSun className="text-4xl text-yellow-500" />,
-    label: "Weather\nForecast",
+    icon: <FaCloudSun className="text-2xl" />,
+    label: "Weather",
     questions: [
-      "1 acre banana borewell hai",
       "Will it rain in the next 48 hours?",
-      "What is the expected temperature range this week?",
-      "Is there any extreme weather warning?",
-      "What is the humidity level?",
+      "Temperature range this week?",
+      "Humidity level today?",
     ],
   },
+
   {
     id: "market",
-    icon: <FaMoneyBillWave className="text-4xl text-orange-500" />,
-    label: "Market\nPrices",
+    icon: <FaMoneyBillWave className="text-2xl" />,
+    label: "Market",
     questions: [
-      "What is today's onion market price?",
-      "Which mandi gives best soybean price?",
-      "What are tomato prices this week?",
-      "Should I sell cotton now or wait?",
-      "What is the MSP for wheat?",
+      "Today's onion market price?",
+      "Best soybean mandi?",
+      "Cotton MSP kya hai?",
     ],
   },
+
   {
     id: "crop",
-    icon: <FaSeedling className="text-4xl text-green-500" />,
-    label: "Crop\nAdvice",
+    icon: <FaSeedling className="text-2xl" />,
+    label: "Crop",
     questions: [
-      "1 acre banana borewell hai",
-      "2 acre drip irrigation banana hai",
-      "Sugarcane ke liye irrigation design chahiye",
-      "Mere farm ke liye best irrigation system batao",
-      "Black soil ke liye irrigation planning chahiye",
+      "Banana Farm",
+      "Drip Design Chahiye",
+      "Subsidy Jaankari",
     ],
   },
+
   {
     id: "pest",
-    icon: <FaBug className="text-4xl text-emerald-500" />,
-    label: "Pest\nControl",
+    icon: <FaBug className="text-2xl" />,
+    label: "Pest",
     questions: [
-      "How to control whiteflies in cotton?",
+      "Whiteflies control kaise kare?",
       "Best pesticide for stem borer?",
-      "Why are my leaves turning yellow?",
-      "How to prevent fungal infection in crops?",
-      "Organic pest control methods?",
+      "Leaves yellow kyun ho rahe hai?",
     ],
   },
 ];
 
 const HeroSection = () => {
-  const [selectedTab, setSelectedTab] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("crop");
 
   const [messages, setMessages] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
-  const [showChat, setShowChat] = useState(false);
-
   const [inputValue, setInputValue] = useState("");
+
+  const messagesEndRef = useRef(null);
 
   const activeTab = tabs.find((tab) => tab.id === selectedTab);
 
-  // 🚀 AI API CALL
+  // ✅ AUTO SCROLL
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
+
+  // ✅ AI CALL
   const sendToAI = async (question) => {
     if (!question.trim()) return;
 
-    // ✅ OPEN CHAT UI
-    setShowChat(true);
-
-    // ✅ ADD USER MESSAGE
     const updatedMessages = [
       ...messages,
       {
@@ -105,7 +101,6 @@ const HeroSection = () => {
     setInputValue("");
 
     try {
-      // ✅ SEND FULL CONVERSATION
       const response = await fetch(
         "https://kisan-collegeai-backend.vercel.app/api/chat",
         {
@@ -122,7 +117,6 @@ const HeroSection = () => {
 
             system: SYSTEM_PROMPT,
 
-            // ✅ CONTINUE CONVERSATION
             messages: updatedMessages.map((msg) => ({
               role: msg.role,
               content: msg.content,
@@ -133,13 +127,10 @@ const HeroSection = () => {
 
       const data = await response.json();
 
-      console.log("AI RESPONSE =>", data);
-
       const aiReply =
         data?.content?.[0]?.text ||
         "No response received from AI";
 
-      // ✅ ADD AI MESSAGE
       setMessages([
         ...updatedMessages,
         {
@@ -162,183 +153,198 @@ const HeroSection = () => {
     setLoading(false);
   };
 
-  // ✅ SEND FROM INPUT
+  // ✅ SEND INPUT
   const handleSend = () => {
     sendToAI(inputValue);
   };
 
   return (
-    <section className="min-h-screen bg-[#f6f7f8] py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-[#f4f5f7] min-h-screen py-10 px-5">
+      <div className="max-w-7xl mx-auto">
+        {/* MAIN GRID */}
+        <div className="grid items-start"   >
+                  
 
-        {/* TITLE */}
-        <div className="text-center mb-14">
-          <h1 className="text-5xl font-bold text-gray-800 mb-3">
-            IRRIGO AI
-          </h1>
-
-          <p className="text-gray-500 text-lg">
-            Smart Irrigation Planning Assistant
-          </p>
-        </div>
-
-        {/* TABS */}
-        <div className="flex flex-wrap justify-center gap-6 mb-12">
-          {tabs.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setSelectedTab(tab.id);
-                setShowChat(false);
-              }}
-              className={`
-                w-44 h-44
-                rounded-3xl
-                border
-                transition-all duration-300
-                flex flex-col items-center justify-center
-                gap-5
-                shadow-md
-                hover:shadow-xl
-                hover:-translate-y-1
-                
-                ${
-                  selectedTab === tab.id
-                    ? "bg-green-50 border-green-500"
-                    : "bg-white border-gray-200"
-                }
-              `}
+          
+          <div
+            className="
+              bg-white
+              rounded-[30px]
+              shadow-xl
+              border
+              border-gray-200
+              h-[85vh]
+              flex
+              flex-col
+              overflow-hidden
+            "
+          >
+            {/* TOP HEADER */}
+            {/* <div
+              className="
+                px-8
+                py-6
+                border-b
+                border-gray-100
+                flex
+                items-center
+                gap-4
+              "
             >
-              {tab.icon}
-
-              <span className="text-xl font-semibold text-gray-700 whitespace-pre-line text-center leading-8">
-                {tab.label}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* QUESTIONS */}
-        {activeTab && !showChat && (
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg border border-gray-100 p-8 mb-10">
-
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-2xl">🌿</span>
-
-              <h2 className="text-3xl font-bold text-gray-800">
-                Popular Questions
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              {activeTab.questions.map((question, i) => (
-                <button
-                  key={i}
-                  onClick={() => sendToAI(question)}
-                  className="
-                    w-full
-                    flex items-center
-                    gap-4
-                    border border-gray-200
-                    rounded-2xl
-                    px-6 py-5
-                    text-left
-                    bg-white
-                    hover:bg-green-50
-                    hover:border-green-400
-                    transition-all duration-200
-                  "
-                >
-                  <FaChevronRight className="text-green-500 text-sm" />
-
-                  <span className="text-lg text-gray-700">
-                    {question}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* CHAT UI */}
-        {showChat && (
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
-
-            {/* HEADER */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-green-50">
-
-              <div className="flex items-center gap-3">
-                <FaRobot className="text-green-600 text-xl" />
-
-                <h3 className="font-bold text-lg text-gray-800">
-                  IRRIGO AI Chat
-                </h3>
-              </div>
-
-              {/* BACK BUTTON */}
-              <button
-                onClick={() => setShowChat(false)}
+              <div
                 className="
-                  flex items-center gap-2
-                  text-sm font-medium
-                  text-green-700
-                  hover:text-green-900
+                  w-14
+                  h-14
+                  rounded-full
+                  bg-green-100
+                  flex
+                  items-center
+                  justify-center
                 "
               >
-                <FaArrowLeft />
-                Back
-              </button>
-            </div>
+                <FaRobot className="text-green-700 text-2xl" />
+              </div>
 
-            {/* MESSAGES */}
-            <div className="p-6 flex flex-col gap-4 h-[500px] overflow-y-auto">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  IRRIGO AI Assistant
+                </h2>
 
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    msg.role === "user"
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
+                <p className="text-gray-500">
+                  Smart irrigation planning & farming
+                  support
+                </p>
+              </div>
+            </div> */}
+
+            {/* CHAT BODY */}
+            <div className="flex-1 overflow-y-auto p-8">
+              {messages.length === 0 && (
+                <div className="h-full flex flex-col items-center justify-center text-center">
                   <div
-                    className={`
-                      max-w-[80%]
-                      px-5
-                      py-4
-                      rounded-2xl
-                      text-[15px]
-                      leading-7
-                      whitespace-pre-wrap
-                      shadow-sm
-                      
-                      ${
-                        msg.role === "user"
-                          ? "bg-green-600 text-white"
-                          : "bg-gray-100 text-gray-800"
-                      }
-                    `}
+                    className="
+                      w-36
+                      h-36
+                      rounded-full
+                      bg-[#006400]
+                      flex
+                      items-center
+                      justify-center
+                      text-6xl
+                      shadow-2xl
+                      mb-10
+                    "
                   >
-                    {msg.content}
+                    🌿
+                  </div>
+
+                  <h1 className="text-6xl font-bold text-[#003b0b] mb-6">
+                    Namaste 🙏
+                  </h1>
+
+                  <p className="text-gray-600 text-2xl leading-10 max-w-3xl mb-14">
+                    Apni fasal aur zameen ki details
+                    dijiye, main aapka poora irrigation
+                    design tayar karunga
+                  </p>
+
+                
+                  <div className="flex flex-wrap justify-center gap-5 max-w-4xl">
+                    {activeTab.questions.map(
+                      (question, index) => (
+                        <button
+                          key={index}
+                          onClick={() =>
+                            sendToAI(question)
+                          }
+                          className="
+                            px-8
+                            py-4
+                            rounded-full
+                            bg-white
+                            border
+                            border-gray-300
+                            shadow-md
+                            hover:shadow-lg
+                            hover:bg-green-50
+                            text-[#006400]
+                            font-semibold
+                            text-lg
+                            transition-all
+                          "
+                        >
+                          {question}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
-              ))}
+              )}
 
-              {loading && (
-                <div className="text-sm text-gray-500">
-                  IRRIGO AI is thinking...
+              {messages.length > 0 && (
+                <div className="flex flex-col gap-6">
+                  {messages.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        msg.role === "user"
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      <div
+                        className={`
+                          max-w-[75%]
+                          px-6
+                          py-5
+                          rounded-[24px]
+                          text-[17px]
+                          leading-8
+                          whitespace-pre-wrap
+                          shadow-sm
+                          
+                          ${
+                            msg.role === "user"
+                              ? "bg-[#006400] text-white rounded-br-md"
+                              : "bg-[#f4f5f7] text-gray-800 border border-gray-200 rounded-bl-md"
+                          }
+                        `}
+                      >
+                        {msg.content}
+                      </div>
+                    </div>
+                  ))}
+
+                  
+                  {loading && (
+                    <div className="flex justify-start">
+                      <div
+                        className="
+                          bg-[#f4f5f7]
+                          border
+                          border-gray-200
+                          px-6
+                          py-4
+                          rounded-[24px]
+                          text-gray-500
+                        "
+                      >
+                        IRRIGO AI is thinking...
+                      </div>
+                    </div>
+                  )}
+
+                  <div ref={messagesEndRef} />
                 </div>
               )}
             </div>
 
-            {/* INPUT */}
-            <div className="border-t border-gray-100 p-4 bg-white">
-              <div className="flex items-center gap-3">
-
+            
+            <div className="border-t border-gray-100 p-6 bg-white">
+              <div className="flex items-center gap-4">
                 <input
                   type="text"
-                  placeholder="Type your message..."
+                  placeholder="Apna sawaal likhein..."
                   value={inputValue}
                   onChange={(e) =>
                     setInputValue(e.target.value)
@@ -350,11 +356,13 @@ const HeroSection = () => {
                   }}
                   className="
                     flex-1
+                    h-16
+                    rounded-full
+                    bg-[#f4f5f7]
                     border
                     border-gray-300
-                    rounded-2xl
-                    px-5
-                    py-4
+                    px-7
+                    text-lg
                     outline-none
                     focus:border-green-500
                   "
@@ -364,25 +372,26 @@ const HeroSection = () => {
                   onClick={handleSend}
                   disabled={loading}
                   className="
-                    w-14
-                    h-14
-                    rounded-2xl
-                    bg-green-600
-                    hover:bg-green-700
+                    w-16
+                    h-16
+                    rounded-full
+                    bg-[#006400]
+                    hover:bg-[#004d00]
                     text-white
                     flex
                     items-center
                     justify-center
                     transition-all
+                    shadow-lg
                     disabled:opacity-50
                   "
                 >
-                  <FaPaperPlane />
+                  <FaPaperPlane className="text-xl" />
                 </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

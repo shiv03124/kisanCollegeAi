@@ -18,7 +18,7 @@ import Footer from "./components/Footer";
 <>
 <Navbar />
 <Home />
-<Footer/>
+{/* <Footer/> */}
 </>
   );
 }
