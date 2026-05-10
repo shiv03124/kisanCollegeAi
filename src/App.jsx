@@ -1,22 +1,26 @@
-import CategoryBrowse from "./components/CategoryBrowse";
-import FeaturesSection from "./components/FeaturesSection";
-import Footer from "./components/Footer";
-import HeroSection from "./components/HeroSection";
-import MandiRates from "./components/MandiRates";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+import Temp from "./components/temp/Shiva";
 import Navbar from "./components/Navbar";
-import HotDeals from "./components/HotDeals"
+import Footer from "./components/Footer";
 
-
-export default function App() {
+ function App() {
   return (
-    <div style={{ fontFamily: "'Segoe UI', Tahoma, sans-serif", minHeight: "100vh" }}>
-      <Navbar />
-      <HeroSection />
-      <CategoryBrowse />
-      <HotDeals />
-      <MandiRates />
-      <FeaturesSection />
-      <Footer />
-    </div>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route path="/" element={<Layout />}>
+    //       <Route index element={<Home />} />
+    //       <Route path="temp" element={<Temp />} />
+    //     </Route>
+    //   </Routes>
+    // </BrowserRouter>
+<>
+<Navbar />
+<Home />
+<Footer/>
+</>
   );
 }
+
+export default App;
