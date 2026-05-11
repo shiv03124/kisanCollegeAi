@@ -221,81 +221,54 @@ const Navbar = ({
               <FaMicrophone />
             </button>
 
-            {/* CTA BUTTON */}
-            {/* <button
-              className="
-                hidden
-                md:flex
-
-                items-center
-                justify-center
-
-                px-5
-                h-11
-
-                rounded-xl
-
-                text-white
-                font-semibold
-
-                shadow-lg
-                hover:scale-[1.03]
-
-                transition-all
-              "
-              style={{
-                background: `linear-gradient(135deg, ${G}, ${B})`,
-              }}
-            >
-              Get Started
-            </button> */}
+          
 
             {/* LANGUAGE SELECTOR */}
-<div
-  className="
-    hidden
-    md:flex
+{/* LANGUAGE DROPDOWN */}
+<div className="hidden md:block">
+  <select
+    value={language}
+    onChange={(e) =>
+      setLanguage(e.target.value)
+    }
+    className="
+      h-11
 
-    items-center
+      px-4
 
-    bg-gray-100
+      rounded-xl
 
-    rounded-xl
+      border
+      border-gray-200
 
-    p-1
-  "
->
-  {["english", "hindi", "marathi"].map(
-    (lang) => (
-      <button
-        key={lang}
-        onClick={() => setLanguage(lang)}
-        className={`
-          px-4
-          py-2
+      bg-white
 
-          rounded-lg
+      text-sm
+      font-semibold
 
-          text-sm
-          font-semibold
+      text-gray-700
 
-          transition-all
+      outline-none
 
-          ${
-            language === lang
-              ? "bg-white shadow text-black"
-              : "text-gray-500"
-          }
-        `}
-      >
-        {lang === "english"
-          ? "EN"
-          : lang === "hindi"
-          ? "हिं"
-          : "मर"}
-      </button>
-    )
-  )}
+      cursor-pointer
+
+      hover:border-green-400
+
+      transition-all
+    "
+  >
+    <option value="english">
+      English
+    </option>
+
+    <option value="hindi">
+      हिन्दी
+    </option>
+
+    <option value="marathi">
+      मराठी
+    </option>
+  </select>
 </div>
 
             {/* MOBILE MENU */}
@@ -385,25 +358,7 @@ const Navbar = ({
               Feedback
             </button>
 
-            <button
-              className="
-                w-full
-
-                h-12
-
-                rounded-xl
-
-                text-white
-                font-bold
-
-                shadow-lg
-              "
-              style={{
-                background: `linear-gradient(135deg, ${G}, ${B})`,
-              }}
-            >
-              Get Started
-            </button>
+          
           </div>
         </div>
       </nav>
