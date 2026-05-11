@@ -1,17 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./components/Home";
-import Temp from "./components/temp/Shiva";
+import { useState } from "react";
+
 import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
 import Footer from "./components/Footer";
 
- function App() {
+function App() {
+  const [language, setLanguage] =
+    useState("english");
+
   return (
-   
-<>
-<Navbar />
-<Home />
-</>
+    <>
+      <Navbar
+        language={language}
+        setLanguage={setLanguage}
+      />
+
+      <HeroSection language={language} />
+
+      <Footer />
+    </>
   );
 }
 

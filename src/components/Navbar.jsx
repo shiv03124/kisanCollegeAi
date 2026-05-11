@@ -13,11 +13,23 @@ import image from "../assets/images/image2.jpeg";
 const G = "#008B44";
 const B = "#2398DD";
 
-const Navbar = () => {
+const navLinks = [
+  "Home",
+  "Why Us",
+  "Features",
+  "Team",
+  "Contact",
+];
+
+const Navbar = ({
+  language,
+  setLanguage,
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
+      {/* FONT */}
       <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet"
@@ -26,12 +38,16 @@ const Navbar = () => {
       <nav
         className="
           w-full
-          bg-white
-          border-b
-          border-gray-200
           sticky
           top-0
           z-50
+
+          bg-white/90
+          backdrop-blur-md
+
+          border-b
+          border-gray-200
+
           shadow-sm
         "
         style={{
@@ -43,9 +59,8 @@ const Navbar = () => {
             max-w-7xl
             mx-auto
 
-            h-[72px]
-            md:h-[78px]
-            lg:h-[82px]
+            h-[74px]
+            md:h-[80px]
 
             px-4
             md:px-6
@@ -56,7 +71,7 @@ const Navbar = () => {
           "
         >
           {/* LEFT */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 cursor-pointer">
             {/* LOGO */}
             <img
               src={image}
@@ -99,6 +114,56 @@ const Navbar = () => {
                 AGROTECH
               </p>
             </div>
+          </div>
+
+          {/* CENTER NAV */}
+          <div
+            className="
+              hidden
+              lg:flex
+
+              items-center
+              gap-8
+            "
+          >
+            {navLinks.map((item, index) => (
+              <a
+                key={index}
+                href={`#${item.toLowerCase().replace(/\s/g, "")}`}
+                className="
+                  text-[15px]
+                  font-semibold
+                  text-gray-700
+
+                  hover:text-black
+                  transition-all
+                  duration-200
+
+                  relative
+                  group
+                "
+              >
+                {item}
+
+                <span
+                  className="
+                    absolute
+                    left-0
+                    -bottom-1
+
+                    w-0
+                    h-[2px]
+
+                    bg-black
+
+                    transition-all
+                    duration-300
+
+                    group-hover:w-full
+                  "
+                />
+              </a>
+            ))}
           </div>
 
           {/* RIGHT */}
@@ -146,6 +211,7 @@ const Navbar = () => {
                 text-[16px]
 
                 transition-all
+                hover:scale-105
               "
               style={{
                 background: "#EEF7FF",
@@ -155,11 +221,88 @@ const Navbar = () => {
               <FaMicrophone />
             </button>
 
+            {/* CTA BUTTON */}
+            {/* <button
+              className="
+                hidden
+                md:flex
+
+                items-center
+                justify-center
+
+                px-5
+                h-11
+
+                rounded-xl
+
+                text-white
+                font-semibold
+
+                shadow-lg
+                hover:scale-[1.03]
+
+                transition-all
+              "
+              style={{
+                background: `linear-gradient(135deg, ${G}, ${B})`,
+              }}
+            >
+              Get Started
+            </button> */}
+
+            {/* LANGUAGE SELECTOR */}
+<div
+  className="
+    hidden
+    md:flex
+
+    items-center
+
+    bg-gray-100
+
+    rounded-xl
+
+    p-1
+  "
+>
+  {["english", "hindi", "marathi"].map(
+    (lang) => (
+      <button
+        key={lang}
+        onClick={() => setLanguage(lang)}
+        className={`
+          px-4
+          py-2
+
+          rounded-lg
+
+          text-sm
+          font-semibold
+
+          transition-all
+
+          ${
+            language === lang
+              ? "bg-white shadow text-black"
+              : "text-gray-500"
+          }
+        `}
+      >
+        {lang === "english"
+          ? "EN"
+          : lang === "hindi"
+          ? "हिं"
+          : "मर"}
+      </button>
+    )
+  )}
+</div>
+
             {/* MOBILE MENU */}
             <button
               onClick={() => setOpen(!open)}
               className="
-                md:hidden
+                lg:hidden
 
                 w-11
                 h-11
@@ -180,21 +323,49 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* MOBILE DROPDOWN */}
-        {open && (
+        {/* MOBILE MENU */}
+        <div
+          className={`
+            lg:hidden
+            overflow-hidden
+            transition-all
+            duration-300
+
+            ${open ? "max-h-[500px]" : "max-h-0"}
+          `}
+        >
           <div
             className="
-              md:hidden
-
               border-t
               border-gray-100
 
-              px-4
-              py-4
+              px-5
+              py-5
 
               bg-white
             "
           >
+            {/* MOBILE LINKS */}
+            <div className="flex flex-col gap-4 mb-5">
+              {navLinks.map((item, index) => (
+                <a
+                  key={index}
+                  href={`#${item.toLowerCase().replace(/\s/g, "")}`}
+                  className="
+                    text-[15px]
+                    font-semibold
+                    text-gray-700
+
+                    hover:text-black
+                    transition-all
+                  "
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+
+            {/* BUTTONS */}
             <button
               className="
                 w-full
@@ -224,15 +395,17 @@ const Navbar = () => {
 
                 text-white
                 font-bold
+
+                shadow-lg
               "
               style={{
                 background: `linear-gradient(135deg, ${G}, ${B})`,
               }}
             >
-              Login
+              Get Started
             </button>
           </div>
-        )}
+        </div>
       </nav>
     </>
   );
