@@ -12,71 +12,85 @@ const B = "#2398DD";
 
 const footerLinks = {
   Product: [
-    "AI Irrigation",
-    "Crop Planning",
-    "Drip Design",
-    "Water Analytics",
+    {
+      name: "AI Irrigation",
+      href: "#chat",
+    },
+    {
+      name: "Crop Planning",
+      href: "#chat",
+    },
+    {
+      name: "Drip Design",
+      href: "#chat",
+    },
+    {
+      name: "Water Analytics",
+      href: "#chat",
+    },
   ],
 
   Company: [
-    "About Us",
-    "Our Team",
-    "Careers",
-    "Contact",
+    {
+      name: "About Us",
+      href: "#whyus",
+    },
+    {
+      name: "Contact",
+      href: "#contact",
+    },
   ],
-
-  Resources: [
-    "Help Center",
-    "Farmer Guide",
-    "Documentation",
-    "Support",
-  ],
-
-  
 };
 
 const socialLinks = [
   {
     icon: <FaTwitter />,
+    href: "https://twitter.com",
   },
   {
     icon: <FaInstagram />,
+    href: "https://instagram.com",
   },
   {
     icon: <FaLinkedin />,
+    href: "https://linkedin.com",
   },
   {
     icon: <FaYoutube />,
+    href: "https://youtube.com",
   },
 ];
 
 const Footer = () => {
   return (
     <footer
+      id="contact"
       className="
         bg-[#081208]
-
         text-white
 
-        pt-20
+        pt-16
         pb-8
 
         px-4
         md:px-6
+
+        overflow-hidden
       "
     >
       <div className="max-w-7xl mx-auto">
-        {/* TOP */}
+        {/* TOP SECTION */}
         <div
           className="
             grid
 
-            md:grid-cols-2
-            lg:grid-cols-5
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-4
 
-            gap-12
+            gap-10
 
-            pb-16
+            pb-12
 
             border-b
             border-white/10
@@ -85,13 +99,16 @@ const Footer = () => {
           {/* BRAND */}
           <div className="lg:col-span-2">
             {/* LOGO */}
-            <div
+            <a
+              href="#home"
               className="
                 flex
                 items-center
                 gap-3
 
                 mb-6
+
+                w-fit
               "
             >
               <div
@@ -120,9 +137,7 @@ const Footer = () => {
                 <h2
                   className="
                     text-3xl
-
                     font-black
-
                     tracking-[-1px]
                   "
                 >
@@ -132,29 +147,29 @@ const Footer = () => {
                 <p
                   className="
                     text-xs
-
                     tracking-[4px]
-
                     font-semibold
-
                     text-green-400
                   "
                 >
                   AGROTECH AI
                 </p>
               </div>
-            </div>
+            </a>
 
             {/* DESCRIPTION */}
             <p
               className="
                 text-gray-400
 
-                leading-8
+                leading-7
+
+                text-sm
+                md:text-base
 
                 max-w-md
 
-                mb-8
+                mb-7
               "
             >
               India’s smart AI-powered irrigation
@@ -164,14 +179,16 @@ const Footer = () => {
             </p>
 
             {/* SOCIAL */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {socialLinks.map((item, index) => (
                 <a
                   key={index}
-                  href="#"
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
                   className="
-                    w-11
-                    h-11
+                    w-10
+                    h-10
 
                     rounded-xl
 
@@ -187,10 +204,11 @@ const Footer = () => {
                     text-gray-400
 
                     hover:text-white
-                    hover:border-green-500
                     hover:bg-green-600/20
+                    hover:border-green-500
 
                     transition-all
+                    duration-300
                   "
                 >
                   {item.icon}
@@ -206,31 +224,32 @@ const Footer = () => {
                 <h3
                   className="
                     text-lg
-
                     font-bold
 
-                    mb-6
+                    mb-5
                   "
                 >
                   {section}
                 </h3>
 
-                <ul className="space-y-4">
+                <ul className="space-y-3">
                   {links.map((link) => (
-                    <li key={link}>
+                    <li key={link.name}>
                       <a
-                        href="#"
+                        href={link.href}
                         className="
+                          text-sm
                           text-gray-400
 
                           hover:text-green-400
 
                           transition-all
+                          duration-300
 
-                          text-sm
+                          inline-block
                         "
                       >
-                        {link}
+                        {link.name}
                       </a>
                     </li>
                   ))}
@@ -238,16 +257,68 @@ const Footer = () => {
               </div>
             )
           )}
+
+          {/* QUICK NAVIGATION */}
+          {/* <div>
+            <h3
+              className="
+                text-lg
+                font-bold
+
+                mb-5
+              "
+            >
+              Navigation
+            </h3>
+
+            <ul className="space-y-3">
+              {[
+                {
+                  label: "Home",
+                  href: "#home",
+                },
+                {
+                  label: "Why Us",
+                  href: "#whyus",
+                },
+                {
+                  label: "Features",
+                  href: "#features",
+                },
+                {
+                  label: "Contact",
+                  href: "#contact",
+                },
+              ].map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    className="
+                      text-sm
+                      text-gray-400
+
+                      hover:text-green-400
+
+                      transition-all
+                      duration-300
+                    "
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div> */}
         </div>
 
         {/* BOTTOM */}
         <div
           className="
-            pt-8
+            pt-7
 
             flex
             flex-col
-            md:flex-row
+            lg:flex-row
 
             items-center
             justify-between
@@ -262,7 +333,7 @@ const Footer = () => {
               text-gray-500
 
               text-center
-              md:text-left
+              lg:text-left
             "
           >
             © 2026 IRRIGO Technologies Pvt.
@@ -270,7 +341,17 @@ const Footer = () => {
           </p>
 
           {/* STORE BUTTONS */}
-          <div className="flex items-center gap-3">
+          <div
+            className="
+              flex
+              flex-wrap
+
+              items-center
+              justify-center
+
+              gap-3
+            "
+          >
             <button
               className="
                 px-5
@@ -290,6 +371,7 @@ const Footer = () => {
                 hover:border-green-500
 
                 transition-all
+                duration-300
               "
             >
               🍎 App Store
@@ -314,6 +396,7 @@ const Footer = () => {
                 hover:border-blue-500
 
                 transition-all
+                duration-300
               "
             >
               🤖 Play Store

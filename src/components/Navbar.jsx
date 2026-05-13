@@ -17,7 +17,6 @@ const navLinks = [
   "Home",
   "Why Us",
   "Features",
-  "Team",
   "Contact",
 ];
 
@@ -37,8 +36,8 @@ const Navbar = ({
 
       <nav
         className="
-          w-full
-          sticky
+          mx-41
+          
           top-0
           z-50
 
