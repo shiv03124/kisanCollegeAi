@@ -8,7 +8,7 @@ import {
   FaCommentDots,
 } from "react-icons/fa";
 
-import image from "../assets/images/image2.jpeg";
+import image from "../assets/images/image5.png";
 
 const G = "#008B44";
 const B = "#2398DD";
@@ -78,14 +78,14 @@ const Navbar = ({
               className="
                 h-11
                 md:h-12
-                lg:h-14
+                lg:h-10
                 w-auto
                 object-contain
               "
             />
 
             {/* BRAND */}
-            <div className="leading-none">
+            {/* <div className="leading-none">
               <h1
                 className="
                   text-[24px]
@@ -112,7 +112,7 @@ const Navbar = ({
               >
                 AGROTECH
               </p>
-            </div>
+            </div> */}
           </div>
 
           {/* CENTER NAV */}

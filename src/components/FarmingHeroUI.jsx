@@ -98,7 +98,7 @@ const FarmingHeroUI = () => {
             "
           >
             Irrigo AI helps farmers with irrigation
-            planning, crop guidance, water
+            planning, water
             management, government schemes, and
             agriculture insights in simple language.
           </p>
@@ -136,26 +136,7 @@ const FarmingHeroUI = () => {
               Try Irrigo AI
             </button>
 
-            <button
-              className="
-                px-7
-                py-4
-
-                rounded-2xl
-
-                border
-                border-[#00A63E]
-
-                text-[#008B44]
-                font-bold
-
-                hover:bg-green-50
-
-                transition-all
-              "
-            >
-              Watch Demo
-            </button>
+           
           </div>
 
           {/* STATS */}
@@ -174,10 +155,7 @@ const FarmingHeroUI = () => {
                 title: "24/7",
                 sub: "Farmer Assistance",
               },
-              {
-                title: "AI",
-                sub: "Crop Guidance",
-              },
+              
               {
                 title: "Multi",
                 sub: "Language Support",
@@ -394,9 +372,7 @@ const FarmingHeroUI = () => {
                       18,000–22,000 L/day
                     </li>
 
-                    <li>
-                      • Suggested Pump: 3 HP
-                    </li>
+                    
                   </ul>
                 </div>
               </div>
