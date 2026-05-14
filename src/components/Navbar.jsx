@@ -1,367 +1,103 @@
-// Navbar.jsx
-
 import { useState } from "react";
-import {
-  FaBars,
-  FaTimes,
-  FaMicrophone,
-  FaCommentDots,
-} from "react-icons/fa";
-
+import { FaBars, FaTimes, FaMicrophone, FaCommentDots } from "react-icons/fa";
 import image from "../assets/images/image5.png";
 
 const G = "#008B44";
 const B = "#2398DD";
 
-const navLinks = [
-  "Home",
-  "Why Us",
-  "Features",
-  "Contact",
-];
+const navLinks = ["Home", "Why Us", "Features", "Contact"];
 
-const Navbar = ({
-  language,
-  setLanguage,
-}) => {
+const Navbar = ({ language, setLanguage }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      {/* FONT */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet"
-      />
-
-      <nav
+    <nav
+      className="
+        fixed top-0 left-0 w-full z-50
+        bg-white/80 backdrop-blur-md
+        border-b border-gray-200
+      "
+    >
+      <div
         className="
-          mx-41
-          
-          top-0
-          z-50
-
-          bg-white/90
-          backdrop-blur-md
-
-          border-b
-          border-gray-200
-
-          shadow-sm
+          max-w-7xl mx-auto
+          h-[72px]
+          px-4 md:px-6
+          flex items-center justify-between
         "
-        style={{
-          fontFamily: "'Inter', sans-serif",
-        }}
       >
-        <div
-          className="
-            max-w-7xl
-            mx-auto
+        {/* LOGO */}
+        <div className="flex items-center">
+          <img src={image} alt="IRRIGO" className="h-10 md:h-11 w-auto" />
+        </div>
 
-            h-[74px]
-            md:h-[80px]
-
-            px-4
-            md:px-6
-
-            flex
-            items-center
-            justify-between
-          "
-        >
-          {/* LEFT */}
-          <div className="flex items-center gap-3 cursor-pointer">
-            {/* LOGO */}
-            <img
-              src={image}
-              alt="IRRIGO"
+        {/* CENTER NAV */}
+        <div className="hidden lg:flex items-center gap-8">
+          {navLinks.map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase().replace(/\s/g, "")}`}
               className="
-                h-11
-                md:h-12
-                lg:h-10
-                w-auto
-                object-contain
+                text-[15px] font-semibold text-gray-700
+                hover:text-black transition relative group
               "
-            />
+            >
+              {item}
+              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-black group-hover:w-full transition-all" />
+            </a>
+          ))}
+        </div>
 
-            {/* BRAND */}
-            {/* <div className="leading-none">
-              <h1
-                className="
-                  text-[24px]
-                  md:text-[28px]
-                  font-black
-                  tracking-[-1px]
-                  text-black
-                "
-              >
-                IRRIGO
-              </h1>
+        {/* RIGHT */}
+        <div className="flex items-center gap-3">
+          <button className="hidden md:flex items-center gap-2 border px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50">
+            <FaCommentDots />
+            Feedback
+          </button>
 
-              <p
-                className="
-                  text-[10px]
-                  md:text-[12px]
-                  font-bold
-                  tracking-[3px]
-                  mt-1
-                "
-                style={{
-                  color: G,
-                }}
-              >
-                AGROTECH
-              </p>
-            </div> */}
-          </div>
-
-          {/* CENTER NAV */}
-          <div
-            className="
-              hidden
-              lg:flex
-
-              items-center
-              gap-8
-            "
+          {/* <button
+            className="w-10 h-10 rounded-full flex items-center justify-center"
+            style={{ background: "#EEF7FF", color: B }}
           >
-            {navLinks.map((item, index) => (
+            <FaMicrophone />
+          </button> */}
+
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="hidden md:block h-10 px-3 rounded-xl border text-sm font-semibold"
+          >
+            <option value="english">English</option>
+            <option value="hindi">हिन्दी</option>
+            <option value="marathi">मराठी</option>
+          </select>
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="lg:hidden w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full"
+          >
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+      </div>
+
+      {/* MOBILE */}
+      {open && (
+        <div className="lg:hidden border-t bg-white px-5 py-4">
+          <div className="flex flex-col gap-4">
+            {navLinks.map((item) => (
               <a
-                key={index}
+                key={item}
                 href={`#${item.toLowerCase().replace(/\s/g, "")}`}
-                className="
-                  text-[15px]
-                  font-semibold
-                  text-gray-700
-
-                  hover:text-black
-                  transition-all
-                  duration-200
-
-                  relative
-                  group
-                "
+                className="text-gray-700 font-semibold"
               >
                 {item}
-
-                <span
-                  className="
-                    absolute
-                    left-0
-                    -bottom-1
-
-                    w-0
-                    h-[2px]
-
-                    bg-black
-
-                    transition-all
-                    duration-300
-
-                    group-hover:w-full
-                  "
-                />
               </a>
             ))}
           </div>
-
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            {/* FEEDBACK */}
-            <button
-              className="
-                hidden
-                md:flex
-
-                items-center
-                gap-2
-
-                border
-                border-gray-200
-
-                px-4
-                py-2.5
-
-                rounded-xl
-
-                text-sm
-                font-semibold
-
-                hover:bg-gray-50
-                transition-all
-              "
-            >
-              <FaCommentDots />
-              Feedback
-            </button>
-
-            {/* MIC */}
-            <button
-              className="
-                w-11
-                h-11
-
-                rounded-full
-
-                flex
-                items-center
-                justify-center
-
-                text-[16px]
-
-                transition-all
-                hover:scale-105
-              "
-              style={{
-                background: "#EEF7FF",
-                color: B,
-              }}
-            >
-              <FaMicrophone />
-            </button>
-
-          
-
-            {/* LANGUAGE SELECTOR */}
-{/* LANGUAGE DROPDOWN */}
-<div className="hidden md:block">
-  <select
-    value={language}
-    onChange={(e) =>
-      setLanguage(e.target.value)
-    }
-    className="
-      h-11
-
-      px-4
-
-      rounded-xl
-
-      border
-      border-gray-200
-
-      bg-white
-
-      text-sm
-      font-semibold
-
-      text-gray-700
-
-      outline-none
-
-      cursor-pointer
-
-      hover:border-green-400
-
-      transition-all
-    "
-  >
-    <option value="english">
-      English
-    </option>
-
-    <option value="hindi">
-      हिन्दी
-    </option>
-
-    <option value="marathi">
-      मराठी
-    </option>
-  </select>
-</div>
-
-            {/* MOBILE MENU */}
-            <button
-              onClick={() => setOpen(!open)}
-              className="
-                lg:hidden
-
-                w-11
-                h-11
-
-                rounded-full
-
-                flex
-                items-center
-                justify-center
-
-                text-[18px]
-
-                bg-gray-100
-              "
-            >
-              {open ? <FaTimes /> : <FaBars />}
-            </button>
-          </div>
         </div>
-
-        {/* MOBILE MENU */}
-        <div
-          className={`
-            lg:hidden
-            overflow-hidden
-            transition-all
-            duration-300
-
-            ${open ? "max-h-[500px]" : "max-h-0"}
-          `}
-        >
-          <div
-            className="
-              border-t
-              border-gray-100
-
-              px-5
-              py-5
-
-              bg-white
-            "
-          >
-            {/* MOBILE LINKS */}
-            <div className="flex flex-col gap-4 mb-5">
-              {navLinks.map((item, index) => (
-                <a
-                  key={index}
-                  href={`#${item.toLowerCase().replace(/\s/g, "")}`}
-                  className="
-                    text-[15px]
-                    font-semibold
-                    text-gray-700
-
-                    hover:text-black
-                    transition-all
-                  "
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-
-            {/* BUTTONS */}
-            <button
-              className="
-                w-full
-
-                h-12
-
-                rounded-xl
-
-                border
-                border-gray-200
-
-                font-semibold
-
-                mb-3
-              "
-            >
-              Feedback
-            </button>
-
-          
-          </div>
-        </div>
-      </nav>
-    </>
+      )}
+    </nav>
   );
 };
 
