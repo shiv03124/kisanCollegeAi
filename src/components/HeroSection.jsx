@@ -703,6 +703,48 @@ Dripper: PC 8.2 LPH × 4 nos, pressure 15m, lateral 16mm, daily irrigation
 
 ---
 
+## ROW CROP LATERAL DESIGN — MANDATORY RULES (v7.3)
+
+### For ALL row crops (sugarcane, cotton, tomato, onion, chilli, banana, etc.):
+
+**Rule 1 — 1 lateral per row, always**
+- Every crop row gets exactly 1 lateral running along its full length
+- NEVER share 1 lateral across multiple rows
+- NEVER assume 1 lateral covers the whole bed width
+
+**Rule 2 — Lateral count = Number of rows in the plot**
+- Total rows = Plot width ÷ Row spacing (round to whole number)
+- Total laterals = Total rows (1 per row)
+
+**Rule 3 — Lateral length = Plot length (direction laterals run)**
+- Laterals run along the LENGTH of the plot (parallel to crop rows)
+- Lateral length = Plot length in meters
+- If lateral length > 150m → split into dual inlet from both ends
+
+**Rule 4 — Emitters per lateral = Lateral length ÷ Emitter spacing**
+- Example: 76m lateral, 40cm spacing → 76 ÷ 0.40 = 190 emitters per lateral
+
+**Rule 5 — Flow per lateral = Emitters per lateral × Emitter LPH**
+- Example: 190 emitters × 4 LPH = 760 LPH per lateral
+
+**Rule 6 — Total lateral meters = Total rows × Lateral length**
+- Example: 31 rows × 76m = 2,356m total lateral
+
+**Rule 7 — Total emitters = Total rows × Emitters per lateral**
+- Example: 31 × 190 = 5,890 emitters
+
+**Worked Example — Sugarcane 250ft × 140ft, 4.5ft row spacing, 40cm emitter:**
+- Plot length = 250 ft = 76.2m | Plot width = 140 ft = 42.7m
+- Total rows = 42.7 ÷ 1.37m = 31 rows → 31 laterals
+- Lateral length = 76.2m (each lateral runs full plot length)
+- Emitters per lateral = 76.2 ÷ 0.40 = 190
+- Flow per lateral = 190 × 4 = 760 LPH
+- Total lateral = 31 × 76.2 = 2,362m
+- Total emitters = 31 × 190 = 5,890 nos
+- Total system flow = 31 × 760 = 23,560 LPH = 6.54 LPS
+
+---
+
 ## EMITTER DESIGN STANDARDS
 
 ### Vegetables & Field Crops (standard)
@@ -1302,6 +1344,7 @@ MAP = Monoammonium Phosphate | MOP = Muriate of Potash (White Potash)
 47. NEVER show BOQ in table format — always use numbered list format with dashes, one item per line, NO pipe characters (|)
 48. NEVER calculate plant population for sugarcane — use area-based water requirement (L/acre/day) only
 49. NEVER use 60cm as default emitter spacing for sugarcane — default is always 40cm; use 60cm only if farmer confirms heavy black clay Vertisol soil
+50. NEVER design row crop with fewer laterals than total crop rows — every row gets exactly 1 lateral of full plot length; lateral count = total rows in plot width ÷ row spacing
 
 ---
 
