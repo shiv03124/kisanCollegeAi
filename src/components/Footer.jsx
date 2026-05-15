@@ -352,55 +352,8 @@ const Footer = () => {
               gap-3
             "
           >
-            <button
-              className="
-                px-5
-                py-3
-
-                rounded-xl
-
-                bg-white/5
-
-                border
-                border-white/10
-
-                text-sm
-                font-semibold
-
-                hover:bg-green-600/20
-                hover:border-green-500
-
-                transition-all
-                duration-300
-              "
-            >
-              🍎 App Store
-            </button>
-
-            <button
-              className="
-                px-5
-                py-3
-
-                rounded-xl
-
-                bg-white/5
-
-                border
-                border-white/10
-
-                text-sm
-                font-semibold
-
-                hover:bg-blue-600/20
-                hover:border-blue-500
-
-                transition-all
-                duration-300
-              "
-            >
-              🤖 Play Store
-            </button>
+           
+          
           </div>
         </div>
       </div>

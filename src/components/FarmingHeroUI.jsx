@@ -5,67 +5,317 @@ const FarmingHeroUI = () => {
       className="
         w-full
         min-h-screen
-        flex items-start justify-center
+
+        flex items-center justify-center
+
         px-6
+
         relative
         overflow-hidden
-        my-20
 
-        bg-gradient-to-br
-        from-[#e9f9ee]
-        via-white
-        to-[#d8f5dd]
+        pt-[110px]
+        pb-20
       "
     >
-      {/* BACKGROUND GLOW EFFECTS */}
-      <div className="absolute top-[-120px] left-[-120px] w-[420px] h-[420px] bg-[#00A63E]/20 blur-[130px] rounded-full" />
-      <div className="absolute bottom-[-140px] right-[-140px] w-[480px] h-[480px] bg-[#1b5e20]/20 blur-[150px] rounded-full" />
-      <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[320px] h-[320px] bg-[#7CFFB2]/10 blur-[120px] rounded-full" />
 
       {/* CONTENT */}
-      <div className="max-w-4xl w-full text-center relative z-10 pt-[72px]">
+      <div
+        className="
+          max-w-6xl
+          w-full
+
+          text-center
+
+          relative z-10
+        "
+      >
 
         {/* TAGLINE */}
-        <p className="text-[#00A63E] text-xs md:text-sm font-bold uppercase tracking-[0.25em] mb-4">
+        <p
+          className="
+            text-[#00A63E]
+
+            text-xs md:text-sm
+
+            font-bold
+
+            uppercase
+
+            tracking-[0.3em]
+
+            mb-5
+          "
+        >
           Design Smart · Irrigate Right · Grow Better
         </p>
 
         {/* HEADING */}
-        <h1 className="text-5xl md:text-6xl font-black leading-[1.05] text-[#0d2610] mb-6">
-          The Future of Irrigation is{" "}
-          <span className="block text-[#00A63E] italic">
-            Intelligent
+        <h1
+          className="
+            text-5xl
+            md:text-7xl
+
+            font-black
+
+            leading-[1.02]
+
+            text-[#0d2610]
+
+            mb-8
+          "
+        >
+          The Future of
+          <span
+            className="
+              block
+
+              text-[#00A63E]
+
+              italic
+            "
+          >
+            Smart Irrigation
           </span>
         </h1>
 
         {/* SUBTEXT */}
-        <p className="text-gray-600 text-base md:text-lg leading-8 mb-8 max-w-2xl mx-auto">
-          India's First Smart Irrigation Designer — we design efficient, precise
-          and sustainable irrigation systems using data, engineering and field intelligence.
+        <p
+          className="
+            text-gray-600
+
+            text-base
+            md:text-xl
+
+            leading-8
+
+            mb-4
+
+            max-w-3xl
+            mx-auto
+          "
+        >
+          India's First AI-Powered Irrigation Designer —
+          helping farmers build efficient, sustainable and
+          precision-driven irrigation systems using intelligent
+          engineering and real field insights.
         </p>
 
-        {/* CTA */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-          <button className="px-8 py-4 rounded-xl bg-[#1b5e20] text-white font-bold hover:scale-105 transition">
+        {/* CTA BUTTONS */}
+        <div
+          className="
+            flex
+            flex-col
+            sm:flex-row
+
+            gap-4
+
+            justify-center
+
+            mb-7
+          "
+        >
+
+          {/* PRIMARY BUTTON */}
+          <button
+           onClick={() => {
+    const section =
+      document.getElementById("chat");
+
+    section?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }}
+            className="
+              px-8 py-4
+
+              rounded-2xl
+
+              bg-[#1b5e20]
+              text-white
+
+              font-bold
+
+              shadow-[0_10px_30px_rgba(27,94,32,0.25)]
+
+              hover:scale-105
+              hover:shadow-[0_15px_40px_rgba(27,94,32,0.35)]
+
+              transition-all duration-300
+            "
+          >
             Try Irrigo AI
           </button>
-          <button className="px-8 py-4 rounded-xl border border-[#1b5e20] text-[#1b5e20] font-bold hover:bg-[#1b5e20] hover:text-white transition">
+
+          {/* SECONDARY BUTTON */}
+          <button
+           onClick={() => {
+    const section =
+      document.getElementById("chat");
+
+    section?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }}
+            className=" 
+              px-8 py-4
+
+              rounded-2xl
+
+              border border-[#1b5e20]/20
+
+              bg-white/70
+              backdrop-blur-xl
+
+              text-[#1b5e20]
+
+              font-bold
+
+              hover:bg-[#1b5e20]
+              hover:text-white
+
+              transition-all duration-300
+            "
+          >
             See How It Works
           </button>
         </div>
 
-        {/* FEATURES */}
-        <div className="flex flex-wrap gap-3 justify-center">
-          {["Right Design", "Less Waste", "Better Yield", "Sustainable Future"].map(
-            (p) => (
-              <span
-                key={p}
-                className="bg-[#e9f7ec] text-[#1b5e20] border border-[#b7e4c7] px-4 py-2 rounded-full text-xs font-bold"
+        {/* FEATURE CARDS */}
+        <div
+          className="
+            flex
+            flex-wrap
+
+            justify-center
+
+            gap-5
+          "
+        >
+
+          {[
+            {
+              icon: "🌱",
+              title: "Right Design",
+              desc: "Precision layouts",
+            },
+
+            {
+              icon: "💧",
+              title: "Less Waste",
+              desc: "Smart water usage",
+            },
+
+            {
+              icon: "📈",
+              title: "Better Yield",
+              desc: "Higher productivity",
+            },
+
+            {
+              icon: "♻️",
+              title: "Sustainable",
+              desc: "Future-ready farming",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="
+                group
+
+                relative
+
+                w-[240px]
+
+                p-6
+
+                rounded-3xl
+
+                bg-white/60
+                backdrop-blur-xl
+
+                border border-white/40
+
+                shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+
+                hover:-translate-y-2
+                hover:shadow-[0_20px_50px_rgba(0,166,62,0.18)]
+
+                transition-all duration-300
+              "
+            >
+
+              {/* HOVER GLOW */}
+              <div
+                className="
+                  absolute inset-0
+
+                  rounded-3xl
+
+                  bg-gradient-to-br
+                  from-[#00A63E]/10
+                  to-transparent
+
+                  opacity-0
+                  group-hover:opacity-100
+
+                  transition
+                "
+              />
+
+              {/* ICON */}
+              <div
+                className="
+                  w-14 h-14
+
+                  mx-auto mb-4
+
+                  rounded-2xl
+
+                  flex items-center justify-center
+
+                  bg-[#e9f9ee]
+
+                  text-3xl
+
+                  relative z-10
+                "
               >
-                {p}
-              </span>
-            )
-          )}
+                {item.icon}
+              </div>
+
+              {/* TITLE */}
+              <h3
+                className="
+                  text-[#0d2610]
+
+                  font-bold
+
+                  text-lg
+
+                  mb-2
+
+                  relative z-10
+                "
+              >
+                {item.title}
+              </h3>
+
+              {/* DESCRIPTION */}
+              <p
+                className="
+                  text-gray-500
+
+                  text-sm
+
+                  leading-6
+
+                  relative z-10
+                "
+              >
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
 
       </div>

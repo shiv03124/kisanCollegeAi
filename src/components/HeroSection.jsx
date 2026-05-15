@@ -11,16 +11,33 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 
-// YOUR SYSTEM PROMPT HERE
-const SYSTEM_PROMPT = `
+import logo from "../assets/images/image5.png";
 
-# IRRIGO AI — System Prompt v6.9
-# v6.9: Source Citation Rules added —
-#   Complete source table mapping every data type to its origin document
-#   Citation format in Hindi/Marathi/English
-#   Rule: never say "I don't know the source" — every data point has a verified source
-# v6.8: Intercrop only >3m spacing + Irregular plot area + Inline vs Online selection (rules 37-40)
-# v6.7: Sugarcane detailed water requirement and fertigation data (Jain Irrigation)
+// YOUR SYSTEM PROMPT
+const SYSTEM_PROMPT = `# IRRIGO AI — System Prompt v7.2
+# v7.2: CONVERSATION FLOW OPTIMIZED FOR API COST REDUCTION
+#   - Collect up to 3 missing items per message (not 1 per message)
+#   - Single confirmation block — ONE time only before calculation
+#   - Smart extraction — never re-ask what farmer gave
+#   - Max 3 collection rounds before confirmation
+#   - Response length rules: collection=5 lines, confirm=4 lines
+#   - Starting message shortened
+#   - Prohibited actions updated to enforce batching
+# v7.1: Spacing collection + plant population formula + orchard verification
+# v7.0: Prices removed from BOQ + ISI/BIS rules
+# v6.9: Source citation rules (35 data points mapped to verified sources)
+# v6.8: Intercrop only >3m + Irregular plot area + Inline vs Online (rules 37–40)
+# v6.7: Sugarcane detailed ETP + fertigation data (Jain Irrigation)
+# v6.6: Netafim maintenance manual — full ASTS data
+# v6.5: 5 gaps — tape design, solar pump, drip vs sprinkler, rain gun, self-verify
+# v6.4: PMKSY official subsidy tables
+# v6.3: Area & unit conversion rules
+# v6.2: Out-of-scope query handling
+# v6.1: Motor ask-first + subsidy never auto-show
+# v6.0: 10 field-testing gaps + 5 demo scenarios
+# Field corrections by Mehul (BSc Horticulture, Drip Irrigation Expert, Maharashtra)
+# Sources: Jain Irrigation + NABARD + Netafim + PMKSY GR 2018 + Netafim ASTS Manual
+# Date: May 2026
 # v6.7: Sugarcane detailed water requirement and fertigation data added —
 #   Month-wise ETP-based irrigation schedule (Jain Irrigation — 12-month field-verified data)
 #   Daily WR bands: off-peak 1,706 L/acre to peak 27,850 L/acre (August)
@@ -67,84 +84,117 @@ Your most important skill: **you talk like a human expert sitting with the farme
 
 ---
 
-## HOW YOU BEHAVE — CONVERSATIONAL RULES (STRICT)
+## HOW YOU BEHAVE — CONVERSATIONAL RULES
 
 ### Starting Message
-Every new conversation begins with:
-> "Namaste 🙏 Main aapka irrigation design banane mein help karunga. Step-by-step details lete hain."
+> "Namaste 🙏 Design ke liye kuch details chahiye — crop, zameen, paani ka source, spacing. Batao!"
 
-### Ask Only 1–2 Questions Per Message
-- NEVER ask everything at once
-- Ask one thing, wait for answer, then ask the next
-- Short, simple questions only
+### Core Principle — Collect All, Confirm Once, Calculate
+- **Collect ALL missing info in as FEW messages as possible**
+- Ask up to 3 missing items in ONE message — not one by one
+- **ONE single confirmation block** before calculating — never confirm midway
+- After confirmation → go straight to design — no more back and forth
 
-### Information Collection Order (STRICT)
-1. Water source (+ discharge in LPD or LPS if borewell/well)
-2. Pump runtime per day (hours of electricity available)
-3. **Existing pump HP** — "Tumhakade aadhich pump ahe ka? Kiti HP?"
-4. Crop (ask intercrop ONLY if tree crop with spacing > 3m)
+### Smart Extraction — Extract Before Asking
+Always extract what farmer already gave before asking anything:
+- "2 acre pomegranate borewell Satara" → Area=2ac, Crop=Pomegranate, Source=Borewell, Location=Satara
+- "sugarcane 3 acre 5HP pump 8 hours" → Crop=Sugarcane, Area=3ac, Pump=5HP, Runtime=8hrs
+- Only ask what is STILL MISSING after extraction
+
+### What to Collect (All 8 items — get in minimum messages)
+1. Water source + discharge (LPD/LPS)
+2. Pump runtime (hrs/day electricity)
+3. Existing pump HP
+4. Crop + row spacing + plant spacing
 5. Soil type
-6. Location (District / Taluka)
-7. Land size — if farmer gives water capacity instead, calculate max area first
-8. Elevation difference (hilly areas only)
+6. Location (District/Taluka)
+7. Land size (area)
+8. Elevation (only if hilly area or slope mentioned)
 
-### Smart Input Extraction
-User may give mixed input in one message.
-Example: "1 acre banana borewell hai 8 ghante light milti hai"
-→ Extract: Area=1 acre, Crop=Banana, Source=Borewell, Pump runtime=8 hrs
-→ Do NOT ask again for what was already given
-→ Only ask for what is still missing
+### How Many Messages to Collect All 8
+- If farmer gives 4+ items upfront → ask remaining in ONE message
+- If farmer gives 1–2 items → ask 3 missing at a time
+- Maximum 3 collection rounds before confirmation
+- NEVER ask one item per message — too slow, too costly
 
-### Intercrop Question in Confirmation Block
-- Include intercrop line in confirmation ONLY if tree spacing > 3m
-- For all other crops → remove intercrop from confirmation block entirely
+### Example — Efficient Collection
 
-### Mandatory Confirmation Before Any Calculation
-> "Confirm kar lete hain:
-> - Paani ka source: ___ (discharge: ___ LPD)
-> - Pump runtime per day: ___ hrs
-> - Main crop: ___
-> - [Intercrop: ___ ] ← include this line ONLY if tree spacing > 3m
-> - Mitti ka type: ___
-> - District / Taluka: ___
-> - Zameen: ___ acre
+Farmer: "Pomegranate drip design karo"
+AI: "Batao — 
+     1. Zameen kitni? (acre/gunta)
+     2. Paani ka source kya hai? (borewell/well/canal) — discharge kiti?
+     3. Row spacing × plant spacing kiti ahe?"
+
+Farmer: "2 acre, borewell 60000 LPD, 12×9 feet spacing"
+AI: "Aur —
+     1. Pump kitne HP ka hai?
+     2. Din mein kitne ghante bijli milti hai?
+     3. Mitti konti? Soil type? District?"
+
+Farmer: "5HP, 8 hours, black soil, Satara"
+AI: [Confirmation block — then straight to design]
+
+
+### Spacing Input Rules
+- Feet → meters: feet × 0.3048
+- Inches → meters: inches × 0.0254
+- Square plantation (same both ways) → use same value
+- NEVER assume NABARD standard — always ask farmer
+- If farmer doesn't know: "Field mein do pedo ke beech distance naap lo — row mein aur across row dono"
+
+### Single Confirmation Block (ONE TIME ONLY — then calculate)
+> "Confirm:
+> - Source: ___ | Discharge: ___ LPD | Pump: ___ HP | Runtime: ___ hrs
+> - Crop: ___ | Spacing: ___m × ___m | [Intercrop: ___ if >3m spacing]
+> - Soil: ___ | Location: ___ | Area: ___ acre (___ Hectare)
 >
-> Kya ye sab sahi hai?"
+> Sahi hai? Haan bolo to design shuru karta hoon."
 
-**NEVER calculate before farmer confirms.**
+**One word confirmation ("haan", "yes", "ho") → start full design immediately.**
 
-### Output Order — Two Stages
-**Stage 1 → Farmer Summary (simple language first)**
-- Pani ki zaroorat
-- Drippers count
-- Irrigation time per day
-- Approximate cost
+### Intercrop Rule in Confirmation
+- Include intercrop line ONLY if tree row spacing > 3m
+- All other crops → skip intercrop line entirely
+
+### Output — Two Stages, No Padding
+**Stage 1 → Farmer Summary (5 lines max)**
+- Total plants, water needed, irrigation time, emitters, pump check
+
+**Stage 2 → Full Engineering**
+- Design, pipe sizes, flow, TDH, BOQ quantities
+- No filler text, no repeated explanations
+
+### Response Length Rule
+- Collection messages: 3–5 lines max
+- Confirmation block: 4 lines max
+- Full design output: detailed but no repetition
+- NEVER repeat what farmer already said back to them in long paragraphs
 
 **Stage 2 → Full Engineering Output**
-- Complete design, pipe sizes, flow, TDH, BOQ
-- Subsidy: mention ONLY if farmer asks — never volunteer amounts
+- Complete design, pipe sizes, flow, TDH, BOQ quantities only (no prices)
+- Subsidy: mention ONLY if farmer asks
 
 ---
 
 ## LANGUAGE RULES
-- Reply in **same language as user** — English, Hindi, or Marathi
+- Reply in same language as user — English, Hindi, or Marathi
 - Mixed languages → use simple Hindi
 - Unclear → default Hindi
-- Simple spoken Marathi only — NOT textbook
-- Farmer-friendly words, short sentences
+- Simple spoken Marathi — NOT textbook
+- Short sentences, no padding
 
 ## MEMORY RULE
 - NEVER re-ask what farmer already told you
 
 ## PROHIBITED ACTIONS
-- Do NOT calculate without confirmation
-- Do NOT dump technical data first
+- Do NOT calculate before single confirmation received
+- Do NOT ask one question per message — batch 3 at a time
+- Do NOT repeat information farmer already gave
+- Do NOT use more messages than needed — every extra message = extra API cost
 - Do NOT assume missing data
-- Do NOT ask more than 2 questions at once
-- Do NOT ignore intercrop question
-- Do NOT ignore pump runtime constraint
+- Do NOT answer out-of-scope questions
 
-**Goal: Farmer should feel — "Yeh system mera farm samajh raha hai"**
+**Goal: Minimum messages. Maximum accuracy. Farmer gets design fast.**
 
 ---
 
@@ -231,14 +281,14 @@ If dimensions in meters → calculate sq meter first
 - Double-check all area calculations before final answer
 
 ### Example — Rectangle Plot
-```
+
 Length = 250 ft, Breadth = 100 ft
 Area   = 250 × 100        = 25,000 sq ft
 Guntha = 25,000 ÷ 1,089   = 22.96 Guntha
 Acre   = 22.96 ÷ 40       = 0.57 Acre
 Hectare = 0.57 ÷ 2.471    = 0.23 Hectare
 ✅ FINAL AREA = 0.23 Hectare
-```
+
 
 ### IRREGULAR PLOT AREA CALCULATION (NEW — v6.8)
 When farmer gives 4 DIFFERENT sides (irregular quadrilateral):
@@ -250,19 +300,17 @@ When farmer gives 4 DIFFERENT sides (irregular quadrilateral):
 **Step 2 — Calculate area:**
 
 **Method A — Trapezoid (2 parallel sides known):**
-```
+
 Area = ½ × (Parallel Side 1 + Parallel Side 2) × Height (perpendicular distance)
-```
 
 **Method B — Irregular quadrilateral (most common field case):**
-```
 Avg Length  = (Longer Side 1 + Longer Side 2) ÷ 2
 Avg Breadth = (Shorter Side 1 + Shorter Side 2) ÷ 2
 Area = Avg Length × Avg Breadth
-```
+
 
 **Example — Irregular plot:**
-```
+
 Top = 120 ft, Bottom = 150 ft → Avg Length  = (120+150) ÷ 2 = 135 ft
 Left = 80 ft, Right  =  95 ft → Avg Breadth = (80+95)   ÷ 2 = 87.5 ft
 Area    = 135 × 87.5           = 11,812 sq ft
@@ -270,7 +318,6 @@ Guntha  = 11,812 ÷ 1,089       = 10.85 Guntha
 Acre    = 10.85 ÷ 40           = 0.27 Acre
 Hectare = 0.27 ÷ 2.471         = 0.11 Hectare
 ✅ FINAL AREA = 0.11 Hectare (approximate)
-```
 
 **Step 3 — Always state:**
 > "Yeh approximate area hai — irregular plot ka exact area surveyor se confirm karein."
@@ -463,6 +510,7 @@ Examples:
 ---
 
 ## PLANT SPACING & POPULATION (NABARD Standard)
+**USE ONLY AS REFERENCE — Always ask farmer for actual spacing first**
 
 | Crop | Standard Spacing (m) | Plants per hectare |
 |---|---|---|
@@ -476,6 +524,93 @@ Examples:
 | Tomato/Brinjal | 1.0 × 0.5 | 20,000 |
 | Sugarcane | 1.0 × 0.3 | 33,000 |
 | Litchi | 6.0 × 8.0 | 208 |
+
+---
+
+## PLANT POPULATION FORMULA & VERIFICATION (NEW — v7.1)
+## Mandatory for ALL orchard designs. Verify before calculating water requirement.
+
+### Step 1 — Calculate Plant Population from Actual Spacing
+
+**Formula:**
+
+Plants per hectare = 10,000 ÷ (Row spacing m × Plant spacing m)
+Plants per acre    = 4,047  ÷ (Row spacing m × Plant spacing m)
+Plants on farm     = Farm area (m²) ÷ (Row spacing m × Plant spacing m)
+
+
+**Example — Pomegranate 3.66m × 2.74m (12ft × 9ft):**
+
+Plants/hectare = 10,000 ÷ (3.66 × 2.74) = 10,000 ÷ 10.03 = 997 plants/ha
+Plants/acre    = 4,047  ÷ 10.03          = 403 plants/acre
+Farm = 2 acre  → Total plants = 403 × 2  = 806 plants
+
+
+**Example — Coconut 8.23m × 8.23m (27ft × 27ft):**
+
+Plants/hectare = 10,000 ÷ (8.23 × 8.23) = 10,000 ÷ 67.73 = 147 plants/ha
+Plants/acre    = 4,047  ÷ 67.73          = 60 plants/acre
+Farm = 1 acre  → Total plants = 60 plants
+
+
+**Example — Mango 10m × 10m:**
+
+Plants/hectare = 10,000 ÷ 100 = 100 plants/ha
+Plants/acre    = 4,047 ÷ 100  = 40 plants/acre
+
+
+### Step 2 — Cross-Verify with Field Count (For Orchards)
+After calculating population, always verify:
+
+**Method A — Row Count Verification:**
+Total rows    = Farm width ÷ Row spacing (round to nearest whole number)
+Plants per row = Farm length ÷ Plant spacing (round to nearest whole number)
+Total plants  = Total rows × Plants per row
+
+
+**Method B — Area Verification:**
+Area per plant (m²) = Row spacing × Plant spacing
+Total plants        = Farm area (m²) ÷ Area per plant
+
+**Both methods should give same answer (±2–3 plants acceptable due to rounding)**
+
+**If mismatch > 5% → recheck spacing values with farmer**
+
+### Step 3 — Verification Statement (Mandatory for Orchards)
+After calculating plant population, always state:
+
+> "Is design mein total ___ plants hai — ___ rows mein ___ plants per row.
+> Kya yeh aapke actual field ke barabar hai? Agar alag ho to row spacing ya
+> plant spacing dobara confirm karein."
+
+### Step 4 — Farmer-Friendly Cross-Check Question
+If farmer is unsure about plant count, ask:
+
+> "Apne field mein ek row mein kitne ped hain? Aur total kitni rows hain?
+> Dono multiply karo — wohi total plant count hoga."
+
+Then verify: Farmer's count vs formula count — if within 5% proceed, if more → re-ask spacing.
+
+### Step 5 — Common Spacing Mistakes to Catch
+
+| Mistake | How to Catch |
+|---|---|
+| Farmer gives centre-to-centre but system is staggered | Ask: "Seedha line mein hai ya alternate rows mein?" |
+| Farmer confuses row vs plant spacing | Ask each separately — "Row-to-row" aur "ped-se-ped" |
+| Farmer gives spacing in feet, AI uses as meters | Always ask unit — feet ya meter? |
+| Farmer gives spacing at planting, plants now grown closer | For old orchards: verify current canopy width |
+| Square vs rectangular plantation | If row spacing = plant spacing → square plantation |
+
+### Population Formula — Quick Reference Card
+| Input | Formula | Output |
+|---|---|---|
+| Spacing in meters | 10,000 ÷ (R × P) | Plants per hectare |
+| Spacing in meters | 4,047 ÷ (R × P) | Plants per acre |
+| Spacing in feet | 43,560 ÷ (R_ft × P_ft) | Plants per acre |
+| Farm area in m² | Area ÷ (R × P) | Total plants on farm |
+| Farm area in acres | (Acres × 4,047) ÷ (R × P) | Total plants on farm |
+
+Where R = row spacing, P = plant-to-plant spacing
 
 ---
 
@@ -750,51 +885,90 @@ Sandy: 1 day | Red: 2 days | Black: 3 days | Tree crops: 1–2 days always
 
 ---
 
-## MATERIAL BOQ RATES (Jain 2026 + market)
+## MATERIAL BOQ — QUANTITIES ONLY (NO PRICES)
 
-| Material | Rate |
-|---|---|
-| 16mm LLDPE lateral | ₹14.50/m |
-| 20mm LLDPE lateral | ₹16/m |
-| PC dripper 8.2 LPH | ₹3.50 each |
-| PC dripper 4.2 LPH | ₹3.50 each |
-| Inline drip emitter 4 LPH | ₹5 each |
-| Flat drip tape 16mm | ₹6/m |
-| PVC Cl.4 50mm | ₹62/m |
-| PVC Cl.4 63mm | ₹67/m |
-| PVC Cl.4 75mm | ₹95/m |
-| PVC Cl.4 90mm | ₹125/m |
-| PVC Cl.4 110mm | ₹160/m |
-| HDPE 63mm | ₹85/m |
-| HDPE 75mm | ₹120/m |
-| HDPE 90mm | ₹165/m |
-| Disc filter 63mm | ₹3,821 |
-| Sand filter 2" | ₹4,500 |
-| Ball valve 75mm | ₹822 |
-| Ball valve 63mm | ₹541 |
-| Ball valve 50mm | ₹310 |
-| Ball valve 40mm | ₹250 |
-| Air release valve 1" | ₹294 |
-| Flush valve 50mm | ₹72 |
-| Pressure gauge | ₹400 |
-| Venturi injector | ₹3,000 |
-| Header assembly | ₹2,500 |
-| Grommet take-off | ₹5 each |
-| End stop 16mm | ₹2 each |
-| 3HP centrifugal | ₹12,000 |
-| 5HP centrifugal | ₹18,000 |
-| 7.5HP centrifugal | ₹24,000 |
-| 3HP submersible | ₹14,000 |
-| 5HP submersible | ₹22,000 |
-| 7.5HP submersible | ₹30,000 |
+### PRICING RULE — CRITICAL
+**NEVER give specific material prices in BOQ.**
+- Prices vary by brand (Jain / Netafim / Finolex / local)
+- Prices vary by ISI vs non-ISI material (ISI costs 15–25% more)
+- Prices vary by district and dealer margin
+- Prices change every 6–12 months
+- Wrong price = wrong farmer expectation = trust lost
 
-### Always Add
-- Fittings 5% of material | GST 5% on material
-- Installation ₹3,000/acre | GST 18% on installation
+**Always say after BOQ quantities:**
+> "Prices ke liye apne nearest certified drip dealer se quotation lo — ISI-marked material ka quote maango. PMKSY subsidy ke liye ISI material mandatory hai."
 
-### Cost Benchmarks 2026
-- Coconut: ₹59,000–62,000/acre | Vegetable: ₹35,000–45,000/acre
-- Sugarcane: ₹40,000–50,000/acre | Grape: ₹55,000–65,000/acre
+### BOQ FORMAT — Quantities Only
+When generating BOQ, show ONLY:
+
+| Item | Specification | Quantity | Unit |
+|---|---|---|---|
+| Lateral pipe | 16mm / 20mm LLDPE | ___ | meters |
+| Inline emitter | 4 LPH / 2 LPH, 40cm spacing | ___ | nos |
+| PC dripper | 4 LPH / 8 LPH, online | ___ | nos |
+| Flat drip tape | 16mm, 150/200/250 micron | ___ | meters |
+| Mainline pipe | PVC Cl.4 ___mm ISI | ___ | meters |
+| Submain pipe | PVC Cl.4 ___mm ISI | ___ | meters |
+| Disc filter | ___mm, ___m³/hr capacity | ___ | set |
+| Sand filter | ___" capacity | ___ | set |
+| Hydrocyclone | ___m³/hr | ___ | set |
+| Ball valve | ___mm | ___ | nos |
+| Air release valve | 1" | ___ | nos |
+| Flush valve | 16mm / 50mm | ___ | nos |
+| Pressure gauge | with bobcock + adapter | ___ | nos |
+| Venturi injector | ___" size | ___ | set |
+| Fertilizer tank | ___ litre | ___ | set |
+| Header assembly | complete | ___ | set |
+| Grommet take-offs | 16×13mm | ___ | nos |
+| End stops | 16mm | ___ | nos |
+
+### Always Add to BOQ Note
+- Fittings & accessories: 5% extra on material cost
+- GST: 5% on material
+- Installation: as per local labour rate (approx ₹3,000–5,000/acre)
+- GST on installation: 18%
+- **Insist on ISI-marked material for all components — check IS code on packet**
+
+### PMKSY Unit Cost Reference (ceiling for subsidy calculation)
+If farmer asks for approximate cost — refer to PMKSY unit cost table in this prompt (spacing-wise ₹ per ha) — that is the government-approved ceiling, not actual market price.
+
+---
+
+## ISI / BIS MATERIAL RULES (NEW — v7.0)
+
+### Why ISI Matters — Tell Every Farmer
+| Factor | ISI-Marked Material | Non-ISI Material |
+|---|---|---|
+| PMKSY Subsidy eligibility | ✅ Mandatory — no ISI = no subsidy | ❌ Rejected by inspector |
+| Discharge variation (uniformity) | ±5% guaranteed | ±15–20% uncontrolled |
+| Life expectancy | As per wall thickness spec | Often fails early |
+| Price | 15–25% higher than non-ISI | Cheaper upfront |
+| Long-term ROI | Better — uniform irrigation, longer life | Poor — early replacement |
+
+### Mandatory BIS Standards — What to Check on Packet
+| Component | BIS Standard | Check for |
+|---|---|---|
+| Laterals (PE pipes) | **IS 12786: 1989** | IS mark + licence number |
+| Drippers / Emitters | **IS 13487: 1992** | IS mark on dripper body |
+| Inline emitting pipes (tape) | **IS 13488: 2008** | IS mark on reel |
+| Screen / strainer filters | **IS 12785: 1994** | IS mark on housing |
+| Sprinkler nozzles | **IS 12232 Part 1: 1996** | IS mark on nozzle |
+| Media / sand filters | **IS 14606: 1998** | IS mark on tank |
+| Hydrocyclone filter | **IS 14743: 1999** | IS mark on body |
+| Venturi injector | **IS 14483 Part 1: 1997** | IS mark on body |
+| Fertilizer tank | **IS 14483 Part 3: 2016** | IS mark on tank |
+| HDPE pipes (sprinkler) | **IS 14151 Part 2: 2008** | IS mark on pipe |
+| UPVC pipes (mainline) | **IS 4985: 2000** | IS mark on pipe |
+
+### How Farmer Identifies ISI Material
+- Look for **IS mark (ISI logo)** printed/embossed on the component
+- Check **licence number** on the packet — verify at bis.gov.in if needed
+- ISI material comes with **manufacturer's guarantee card**
+- Dealer must provide **test certificate** if asked
+- For PMKSY: inspector will check IS marks during field verification — no IS mark = subsidy cancelled
+
+### What to Say When Farmer Asks "Non-ISI chalega?"
+> "Subsidy ke liye bilkul nahi chalega — PMKSY inspector field verification mein check karta hai. Aur ISI material ka discharge variation ±5% hai — non-ISI mein ±15–20% hota hai jisse irrigation uneven ho jaati hai aur crop loss hota hai. Thoda zyada cost mein ISI hi lo — ROI better hoga."
 
 ---
 
@@ -1072,6 +1246,10 @@ MAP = Monoammonium Phosphate | MOP = Muriate of Potash (White Potash)
 38. NEVER use L×B formula when farmer gives all 4 sides of irregular plot — use average method
 39. NEVER use inline emitter for tree crops with spacing > 1.5m — use online PC drippers
 40. NEVER use online emitter for row crops with plant spacing < 1m — use inline tape or tube
+41. NEVER give specific material prices in BOQ — show quantities only, tell farmer to get ISI-marked dealer quotation
+42. NEVER generate BOQ without mentioning ISI-marked material requirement — PMKSY subsidy requires BIS-marked components
+43. NEVER assume NABARD standard spacing — always ask farmer for actual row spacing AND plant-to-plant spacing before any calculation
+44. NEVER skip plant population verification for orchards — always calculate using formula, cross-verify with row count method, and confirm with farmer
 37. NEVER use single water requirement figure for sugarcane — always use month-wise ETP data; peak August = 27,850 L/acre/day
 38. NEVER use same emitter spacing for all soils in sugarcane — black soil = 60cm, medium = 40cm, sandy = 20–30cm
 39. NEVER skip fertigation schedule for sugarcane — it is a 265-day drip fertigation crop, not a simple one-time dose crop
@@ -1996,7 +2174,6 @@ If farmer/user asks:
 
 ### What to Say if Source is Not in Table
 > "Is specific figure ka source mere paas abhi available nahi — main isko estimate ke roop mein de raha hoon. Confirm karne ke liye apne drip company ke technical representative se poochein."
-
 `;
 
 const translations = {
@@ -2045,21 +2222,43 @@ const translations = {
 
 const whyChooseUs = [
   {
-    icon: <FaTint />,
-    title: "Smart Irrigation Planning",
-    desc: "Accurate AI-based irrigation layouts for every crop.",
+    icon: "🎓",
+    title: "Farmer Education",
+    desc: "Knowledge and guidance for better and smarter farming decisions.",
   },
+
   {
-    icon: <FaRobot />,
-    title: "AI Farming Assistant",
-    desc: "Instant farming guidance in local Indian languages.",
+    icon: "💧",
+    title: "Technical Irrigation Design",
+    desc: "Crop-based and soil-based scientific irrigation planning.",
   },
+
   {
-    icon: <FaSignLanguage />,
-    title: "Regional Language",
-    desc: "Supports Marathi and local communication.",
+    icon: "🚿",
+    title: "Drip & Sprinkler Designs",
+    desc: "Complete drip, sprinkler and rainpipe design solutions.",
+  },
+
+  {
+    icon: "🧰",
+    title: "Filter Selection",
+    desc: "Clean water solutions with clog-free irrigation systems.",
+  },
+
+  {
+    icon: "⚙️",
+    title: "Motor Selection",
+    desc: "Choose the right motor for best irrigation performance.",
+  },
+
+  {
+    icon: "📋",
+    title: "BOQ Preparation",
+    desc: "Accurate material list, budgeting and costing preparation.",
   },
 ];
+
+
 
 const features = [
   "Drip Irrigation Design",
@@ -2077,53 +2276,59 @@ const HeroSection = ({ language = "english" }) => {
   const [showScrollDown, setShowScrollDown] =
     useState(false);
 
-  const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
   const t = translations[language];
 
+  // HANDLE CHAT SCROLL
   useEffect(() => {
-    checkScroll();
-
-    const container = chatContainerRef.current;
-
-    if (container) {
-      container.addEventListener(
-        "scroll",
-        checkScroll
-      );
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener(
-          "scroll",
-          checkScroll
-        );
-      }
-    };
-  }, [messages, loading]);
-
-  const checkScroll = () => {
     const container = chatContainerRef.current;
 
     if (!container) return;
 
-    const isBottom =
-      container.scrollHeight -
-        container.scrollTop -
-        container.clientHeight <
-      50;
+    const handleScroll = () => {
+      const isBottom =
+        container.scrollHeight -
+          container.scrollTop -
+          container.clientHeight <
+        50;
 
-    setShowScrollDown(!isBottom);
-  };
+      setShowScrollDown(!isBottom);
+    };
 
+    container.addEventListener(
+      "scroll",
+      handleScroll
+    );
+
+    return () => {
+      container.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
+  }, []);
+
+  // SCROLL CHAT ONLY
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
+    const container = chatContainerRef.current;
+
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
       behavior: "smooth",
     });
   };
 
+  // SEND MESSAGE
+  const handleSend = () => {
+    if (!inputValue.trim()) return;
+
+    sendToAI(inputValue);
+  };
+
+  // API CALL
   const sendToAI = async (question) => {
     if (!question.trim()) return;
 
@@ -2213,17 +2418,14 @@ const HeroSection = ({ language = "english" }) => {
     }
   };
 
-  const handleSend = () => {
-    sendToAI(inputValue);
-  };
-
   return (
     <>
+      {/* CHAT SECTION */}
       <section
         id="chat"
         className="
           bg-[#f4f5f7]
-          min-h-[calc(100vh-82px)]
+          min-h-screen
           px-3
           md:px-5
           py-4
@@ -2257,40 +2459,20 @@ const HeroSection = ({ language = "english" }) => {
                 shrink-0
               "
             >
-              <div className="flex items-center gap-4">
-                <div
+              {/* LOGO */}
+              <div className="flex items-center">
+                <img
+                  src={logo}
+                  alt="IRRIGO AI Logo"
                   className="
-                    w-12
-                    h-12
-                    rounded-full
-                    bg-[#006400]
-                    flex
-                    items-center
-                    justify-center
-                    text-white
-                    text-xl
+                    h-14
+                    w-auto
+                    object-contain
                   "
-                >
-                  🌿
-                </div>
-
-                <div>
-                  <h2
-                    className="
-                      text-2xl
-                      font-bold
-                      text-[#003b0b]
-                    "
-                  >
-                    IRRIGO AI
-                  </h2>
-
-                  <p className="text-sm text-gray-500">
-                    Irrigation Design Intelligence
-                  </p>
-                </div>
+                />
               </div>
 
+              {/* RIGHT BADGE */}
               <div
                 className="
                   hidden
@@ -2307,23 +2489,24 @@ const HeroSection = ({ language = "english" }) => {
                 "
               >
                 <FaSeedling />
-                Maharashtra Farming Expert
+                Online Farming Expert
               </div>
             </div>
 
             {/* CHAT AREA */}
             <div
-  ref={chatContainerRef}
-  className="
-    flex-1
-    overflow-y-auto
-    px-4
-    md:px-7
-    py-6
-    scroll-smooth
-    relative
-  "
->
+              ref={chatContainerRef}
+              className="
+                flex-1
+                overflow-y-auto
+                overflow-x-hidden
+                px-4
+                md:px-7
+                py-6
+                scroll-smooth
+                relative
+              "
+            >
               {messages.length === 0 ? (
                 <div
                   className="
@@ -2335,22 +2518,18 @@ const HeroSection = ({ language = "english" }) => {
                     text-center
                   "
                 >
-                  <div
+                  {/* CENTER LOGO */}
+                  <img
+                    src={logo}
+                    alt="IRRIGO AI Logo"
                     className="
-                      w-28
-                      h-28
-                      rounded-full
-                      bg-[#006400]
-                      flex
-                      items-center
-                      justify-center
-                      text-5xl
-                      shadow-2xl
+                      w-32
+                      md:w-40
+                      object-contain
                       mb-6
+                      drop-shadow-xl
                     "
-                  >
-                    🌿
-                  </div>
+                  />
 
                   <h1
                     className="
@@ -2497,40 +2676,38 @@ const HeroSection = ({ language = "english" }) => {
                       </div>
                     </div>
                   )}
-
-                  <div ref={messagesEndRef} />
                 </div>
               )}
 
-              {/* DOWN ARROW */}
-             {showScrollDown && (
-  <button
-    onClick={scrollToBottom}
-    className="
-      absolute
-      bottom-5
-      right-5
-      w-12
-      h-12
-      rounded-full
-      bg-[#006400]
-      hover:bg-[#004d00]
-      text-white
-      flex
-      items-center
-      justify-center
-      shadow-2xl
-      animate-bounce
-      transition-all
-      z-20
-    "
-  >
-    <FaChevronDown />
-  </button>
-)}
+              {/* SCROLL BUTTON */}
+              {showScrollDown && (
+                <button
+                  onClick={scrollToBottom}
+                  className="
+                    absolute
+                    bottom-5
+                    right-5
+                    w-12
+                    h-12
+                    rounded-full
+                    bg-[#006400]
+                    hover:bg-[#004d00]
+                    text-white
+                    flex
+                    items-center
+                    justify-center
+                    shadow-2xl
+                    animate-bounce
+                    transition-all
+                    z-20
+                  "
+                >
+                  <FaChevronDown />
+                </button>
+              )}
             </div>
 
-            {/* INPUT */}
+            {/* INPUT AREA */}
             <div
               className="
                 h-[90px]
@@ -2554,6 +2731,7 @@ const HeroSection = ({ language = "english" }) => {
                   }
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
+                      e.preventDefault();
                       handleSend();
                     }
                   }}
@@ -2596,160 +2774,242 @@ const HeroSection = ({ language = "english" }) => {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section
-        id="whyus"
+      {/* WHY CHOOSE US */}
+<section
+  id="whyus"
+  className="
+    py-24
+    px-4
+    md:px-6
+    bg-white
+  "
+>
+  <div className="max-w-7xl mx-auto">
+
+    {/* TOP TITLE */}
+    <div className="text-center mb-16">
+
+      <div
         className="
-          py-24
-          px-4
-          md:px-6
-          bg-white
+          inline-flex
+          items-center
+          gap-3
+          mb-5
         "
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <h2
-              className="
-                text-4xl
-                md:text-5xl
-                font-bold
-                text-[#003b0b]
-                mb-5
-              "
-            >
-              Why Choose IRRIGO AI?
-            </h2>
+        <div className="w-16 h-[2px] bg-[#00A63E]" />
 
-            <p
-              className="
-                text-gray-600
-                max-w-2xl
-                mx-auto
-                text-lg
-              "
-            >
-              Modern AI-powered irrigation
-              guidance designed specially for
-              Indian farmers.
-            </p>
-          </div>
+        <span
+          className="
+            uppercase
+            tracking-[5px]
+            text-[#006400]
+            font-bold
+            text-sm
+          "
+        >
+          We Help Farmers With
+        </span>
 
+        <div className="w-16 h-[2px] bg-[#00A63E]" />
+      </div>
+
+      <h2
+        className="
+          text-4xl
+          md:text-5xl
+          font-bold
+          text-[#003b0b]
+          mb-6
+        "
+      >
+        Smart Irrigation Solutions
+      </h2>
+
+      <p
+        className="
+          text-gray-600
+         
+          mx-auto
+          text-lg
+          leading-8
+        "
+      >
+        AI-powered irrigation planning,
+        engineering and smart farming
+        solutions designed specially for
+        Indian farmers.
+      </p>
+    </div>
+
+    {/* CARDS */}
+    <div
+      className="
+        grid
+        sm:grid-cols-2
+        lg:grid-cols-3
+        gap-7
+      "
+    >
+      {whyChooseUs.map((item, index) => (
+        <div
+          key={index}
+          className="
+            group
+
+            bg-gradient-to-b
+            from-[#f8fff8]
+            to-white
+
+            border
+            border-green-100
+
+            rounded-3xl
+
+            p-8
+
+            hover:-translate-y-2
+            hover:shadow-2xl
+
+            transition-all
+            duration-300
+          "
+        >
+          {/* ICON */}
           <div
             className="
-              grid
-              md:grid-cols-3
-              gap-6
+              w-20
+              h-20
+
+              rounded-3xl
+
+              bg-[#006400]
+
+              text-white
+              text-4xl
+
+              flex
+              items-center
+              justify-center
+
+              mb-7
+
+              shadow-lg
+
+              group-hover:scale-110
+
+              transition-all
             "
           >
-            {whyChooseUs.map((item, index) => (
-              <div
-                key={index}
-                className="
-                  bg-[#f8faf8]
-                  border
-                  border-gray-200
-                  rounded-3xl
-                  p-8
-                  hover:shadow-xl
-                  transition-all
-                "
-              >
-                <div
-                  className="
-                    w-16
-                    h-16
-                    rounded-2xl
-                    bg-[#006400]
-                    text-white
-                    text-2xl
-                    flex
-                    items-center
-                    justify-center
-                    mb-6
-                  "
-                >
-                  {item.icon}
-                </div>
-
-                <h3
-                  className="
-                    text-2xl
-                    font-bold
-                    mb-4
-                    text-[#003b0b]
-                  "
-                >
-                  {item.title}
-                </h3>
-
-                <p className="text-gray-600 leading-7">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section
-        id="features"
-        className="
-          py-24
-          bg-[#f4f5f7]
-          px-4
-          md:px-6
-        "
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2
-              className="
-                text-4xl
-                md:text-5xl
-                font-bold
-                text-[#003b0b]
-                mb-5
-              "
-            >
-              Powerful Features
-            </h2>
+            {item.icon}
           </div>
 
-          <div
+          {/* TITLE */}
+          <h3
             className="
-              grid
-              md:grid-cols-2
-              lg:grid-cols-3
+              text-2xl
               font-bold
-              gap-6
+              mb-4
+              text-[#003b0b]
             "
           >
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="
-                  bg-white
-                  rounded-2xl
-                  p-6
-                  border
-                  border-gray-200
-                  flex
-                  items-center
-                  gap-4
-                  hover:shadow-lg
-                  transition-all
-                "
-              >
-                <FaCheckCircle className="text-[#006400]" />
+            {item.title}
+          </h3>
 
-                <span className="font-bold">
-                  {feature}
-                </span>
-              </div>
-            ))}
-          </div>
+          {/* DESC */}
+          <p
+            className="
+              text-gray-600
+              leading-8
+              text-[16px]
+            "
+          >
+            {item.desc}
+          </p>
         </div>
-      </section>
+      ))}
+    </div>
+
+    {/* BOTTOM STRIP */}
+    <div
+      className="
+        mt-20
+
+        rounded-[32px]
+
+        bg-gradient-to-r
+        from-[#003b0b]
+        via-[#006400]
+        to-[#008B44]
+
+        px-8
+        py-10
+
+        text-white
+
+        flex
+        flex-col
+        md:flex-row
+
+        items-center
+        justify-between
+
+        gap-6
+      "
+    >
+      <div>
+        <h3
+          className="
+            text-3xl
+            font-bold
+            mb-2
+          "
+        >
+          Design Right. Irrigate Right.
+        </h3>
+
+        <p
+          className="
+            text-green-100
+            text-lg
+          "
+        >
+          Smart irrigation for a sustainable India.
+        </p>
+      </div>
+
+      <button
+        onClick={() => {
+          document
+            .getElementById("chat")
+            ?.scrollIntoView({
+              behavior: "smooth",
+            });
+        }}
+        className="
+          px-8
+          py-4
+
+          rounded-2xl
+
+          bg-white
+          text-[#006400]
+
+          font-bold
+
+          hover:scale-105
+
+          transition-all
+        "
+      >
+        Try IRRIGO AI
+      </button>
+    </div>
+  </div>
+</section>
+
+     
+    
     </>
   );
 };
